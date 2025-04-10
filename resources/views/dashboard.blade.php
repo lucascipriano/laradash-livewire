@@ -1,4 +1,5 @@
 <x-layouts.app>
-    <p>Usuário logado: {{ Auth::user()->name }}</p>
+
+ <livewire:clientes />
 
 </x-layouts.app>
