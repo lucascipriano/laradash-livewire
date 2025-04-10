@@ -7,8 +7,8 @@ Painel administrativo feito com Laravel 12, Livewire 3 e Tailwind.
 - [x] Register
 - [x]  Painel
 
-- [ ]  CRUD de usuários
-- 
+- [ ]  CRUD de clientes
+  - Falta criar o layout bonito  
 - [ ]  CRUD de produtos
 
 
