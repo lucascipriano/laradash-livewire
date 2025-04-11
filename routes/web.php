@@ -1,7 +1,7 @@
 <?php
 
 use App\Livewire\{Login, Register} ;
-use App\Models\User;
+use App\Livewire\Pages\{Clientes, Dashboard};
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -18,9 +18,9 @@ Route::get('/logout', function(){
 })->name('logout');
 
 Route::middleware(['auth'])->group(function(){
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', Dashboard::class)->name('dashboard');
+
+    Route::get('/clientes', Clientes::class)->name('clientes');
 
     Route::get('/settings', function () {
 

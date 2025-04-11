@@ -19,18 +19,28 @@
                     <form wire:submit.prevent="{{ $clienteId ? 'updateCliente' : 'createCliente' }}" class="space-y-4">
                         <div>
                             <label for="nome" class="block text-sm font-medium text-gray-700">Nome</label>
-                            <input type="text" id="nome" wire:model="nome"
-                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            <input type="text" id="nome" wire:model.live="nome"
+                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"/>
+                            @error('nome')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
                         </div>
+
                         <div>
                             <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                            <input type="email" id="email" wire:model="email"
+                            <input type="email" id="email" wire:model.live="email"
                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            @error('email')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
                         </div>
                         <div>
                             <label for="telefone" class="block text-sm font-medium text-gray-700">Telefone</label>
-                            <input type="text" id="telefone" wire:model="telefone"
+                            <input type="text" id="telefone" wire:model.live="telefone"
                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            @error('telefone')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
                         </div>
                         <button type="submit"
                                 class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">

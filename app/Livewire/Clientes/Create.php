@@ -5,6 +5,7 @@ namespace App\Livewire\Clientes;
 use App\Models\Cliente;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Rule;
 use Livewire\Component;
 
 class Create extends Component
@@ -13,6 +14,8 @@ class Create extends Component
 
     public function openModal()
     {
+        $this->resetValidation();
+        $this->reset(['nome', 'email', 'telefone', 'clienteId']);
         $this->showModal = true;
     }
 
@@ -24,21 +27,30 @@ class Create extends Component
 
     public $clientes;
 
+    #[Rule(['required', 'string', 'min:3'])]
     public $nome;
+
+
+    #[Rule(['required', 'email', 'string', 'max:255', 'unique:clientes,email'])]
     public $email;
+
+    #[Rule(['required', 'string', 'min:10', 'max:15'])]
     public $telefone;
     public $clienteId;
 
     public function createCliente()
     {
+        $this->validate();
+
         Cliente::create([
             'nome' => $this->nome,
             'email' => $this->email,
             'telefone' => $this->telefone,
-            'user_id' => Auth::id(), // Adiciona o ID do usuário autenticado
+            'user_id' => Auth::id(),
         ]);
 
-        $this->reset(['nome', 'email', 'telefone']);
+
+
         $this->clientes = Cliente::all();
         $this->dispatch('toastify', [
             'msg' => 'Salvo com sucesso!',
@@ -50,18 +62,23 @@ class Create extends Component
             ],
         ]);
         $this->dispatch('cliente::index::refresh');
+        $this->reset();
+
         $this->showModal = false;
     }
+
 
     #[On('openEditModal')]
     public function openEditModal($data)
     {
+
         $this->clienteId = $data['id'];
         $this->nome = $data['nome'];
         $this->email = $data['email'];
         $this->telefone = $data['telefone'];
-        $this->showModal = true; // Abre o modal
+        $this->showModal = true;
     }
+
 
     public function updateCliente()
     {
@@ -83,7 +100,9 @@ class Create extends Component
                     'background' => '#4CAF50',
                 ],
             ]);
-            $this->showModal = false; // Fecha o modal
+            $this->showModal = false;
+            $this->reset();
+
             $this->dispatch('cliente::index::refresh');
         }
     }

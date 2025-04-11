@@ -22,20 +22,10 @@ class Clientes extends Component
 
 
 
-//    public function editCliente($id)
-//    {
-//        $cliente = Cliente::find($id);
-//        if ($cliente) {
-//            $this->clienteId = $cliente->id;
-//            $this->nome = $cliente->nome;
-//            $this->email = $cliente->email;
-//            $this->telefone = $cliente->telefone;
-//            $this->dispatch('editCliente', $cliente);
-//        }
-//    }
 
     public function editCliente($id)
     {
+
         $cliente = Cliente::find($id);
         if ($cliente) {
             $this->dispatch('openEditModal', [
@@ -63,7 +53,10 @@ class Clientes extends Component
     {
         if ($this->clienteId) {
             $this->editCliente($this->clienteId);
+            $this->reset();
+
         } else {
+
             $this->createCliente();
         }
     }
