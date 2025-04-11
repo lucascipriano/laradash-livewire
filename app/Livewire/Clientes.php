@@ -2,46 +2,48 @@
 
 namespace App\Livewire;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Models\Cliente;
 use Illuminate\Support\Facades\Auth;
+use Livewire\WithPagination;
 
 class Clientes extends Component
 {
+    use WithPagination;
 
-    public $clientes;
-    public $cliente;
+
+    public $client;
     public $nome;
     public $email;
     public $telefone;
     public $clienteId;
 
 
-//    TODO: Adicionar refresh pelo livewire, remover o $this->clientes = Cliente::all();
 
-    public function createCliente()
-    {
-        Cliente::create([
-            'nome' => $this->nome,
-            'email' => $this->email,
-            'telefone' => $this->telefone,
-            'user_id' => Auth::id(), // Adiciona o ID do usuário autenticado
-        ]);
 
-        $this->reset(['nome', 'email', 'telefone']);
-        $this->clientes = Cliente::all();
-
-    }
+//    public function editCliente($id)
+//    {
+//        $cliente = Cliente::find($id);
+//        if ($cliente) {
+//            $this->clienteId = $cliente->id;
+//            $this->nome = $cliente->nome;
+//            $this->email = $cliente->email;
+//            $this->telefone = $cliente->telefone;
+//            $this->dispatch('editCliente', $cliente);
+//        }
+//    }
 
     public function editCliente($id)
     {
         $cliente = Cliente::find($id);
         if ($cliente) {
-            $this->clienteId = $cliente->id;
-            $this->nome = $cliente->nome;
-            $this->email = $cliente->email;
-            $this->telefone = $cliente->telefone;
-            $this->clientes = Cliente::all();
+            $this->dispatch('openEditModal', [
+                'id' => $cliente->id,
+                'nome' => $cliente->nome,
+                'email' => $cliente->email,
+                'telefone' => $cliente->telefone,
+            ]);
         }
     }
 
@@ -51,24 +53,31 @@ class Clientes extends Component
         $cliente = Cliente::find($id);
         if ($cliente) {
             $cliente->delete();
-            $this->clientes = Cliente::all();
         } else {
             // Substitui o dd por uma mensagem de erro amigável
             session()->flash('error', 'Cliente não encontrado.');
         }
     }
 
+    public function submit()
+    {
+        if ($this->clienteId) {
+            $this->editCliente($this->clienteId);
+        } else {
+            $this->createCliente();
+        }
+    }
 
 
     public function mount()
     {
-        $this->clientes = Cliente::all();
     }
 
+    #[On('cliente::index::refresh')]
     public function render()
     {
         return view('livewire.clientes', [
-            'clientes' => $this->clientes,
+            'clientes' => Cliente::paginate(10), // Use pagination
         ]);
     }
 }
