@@ -14,13 +14,14 @@ class Create extends Component
 
     public function openModal()
     {
-        $this->resetValidation();
         $this->reset(['nome', 'email', 'telefone', 'clienteId']);
+        $this->resetValidation();
         $this->showModal = true;
     }
 
     public function closeModal()
     {
+        $this->resetValidation();
         $this->showModal = false;
     }
 
@@ -50,8 +51,6 @@ class Create extends Component
         ]);
 
 
-
-        $this->clientes = Cliente::all();
         $this->dispatch('toastify', [
             'msg' => 'Salvo com sucesso!',
             'duration' => 2000,
@@ -91,19 +90,45 @@ class Create extends Component
             ]);
 
             $this->reset(['nome', 'email', 'telefone', 'clienteId']);
-            $this->dispatch('toastify', [
-                'msg' => 'Cliente atualizado com sucesso!',
-                'duration' => 2000,
-                'gravity' => 'top',
-                'position' => 'right',
-                'style' => [
-                    'background' => '#4CAF50',
-                ],
-            ]);
-            $this->showModal = false;
-            $this->reset();
+//            Faça uma condição pára verficar se o cliente foi atualizado
+            if ($cliente->wasChanged()) {
+                $this->dispatch('toastify', [
+                    'msg' => 'Cliente atualizado com sucesso!',
+                    'duration' => 2000,
+                    'gravity' => 'top',
+                    'position' => 'right',
+                    'style' => [
+                        'background' => '#4CAF50',
+                    ],
+                ]
+                );
+                $this->dispatch('toastify', [
+                    'msg' => 'Cliente atualizado com sucesso!',
+                    'duration' => 2000,
+                    'gravity' => 'top',
+                    'position' => 'right',
+                    'style' => [
+                        'background' => '#4CAF50',
+                    ],
+                ]);
+                $this->showModal = false;
+                $this->reset();
 
-            $this->dispatch('cliente::index::refresh');
+                $this->dispatch('cliente::index::refresh');
+            } else {
+                $this->showModal = false;
+                $this->dispatch('toastify', [
+                    'msg' => 'Nenhuma alteração foi feita no cliente.',
+                    'duration' => 2000,
+                    'gravity' => 'top',
+                    'position' => 'right',
+                    'style' => [
+                        'background' => '#FFC107',
+                    ],
+                ]);
+            }
+
+
         }
     }
 
