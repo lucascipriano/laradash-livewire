@@ -1,6 +1,5 @@
 <div>
-    <div :class="{ '!translate-x-0': open }"
-         class="fixed top-0 left-0 z-20 w-9/12 h-screen overflow-y-auto transition duration-300 ease-in-out transform -translate-x-full bg-white sm:w-64 md:translate-x-0">
+    <div>
         <!-- Sidebar Menu -->
         <div :class="{ '!translate-x-0': open }"
              class="fixed top-0 left-0 z-20 w-9/12 h-screen overflow-y-auto transition duration-300 ease-in-out transform -translate-x-full bg-white sm:w-64 md:translate-x-0">
